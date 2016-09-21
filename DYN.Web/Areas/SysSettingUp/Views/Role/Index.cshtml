@@ -1,0 +1,138 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" >
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
+    <title>系统角色设置</title>
+    <link href="/Themes/Styles/style.css" rel="stylesheet" />
+    <script src="/Themes/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="/Themes/Scripts/PqGrid/jquery-ui.min.js"></script>
+    <script src="/Themes/Scripts/PqGrid/pqgrid.min.js" charset="GBK"></script>
+    <link href="/Themes/Scripts/PqGrid/pqgrid.min.css" rel="stylesheet" />
+    <script src="/Themes/Scripts/FunctionJS.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            divresize(63);
+            ListGrid();
+        });
+        function dyn() {
+            top.location = "http://www.baidu.com";
+        }
+        /**加载表格函数**/
+        function ListGrid() {
+            var Parm_Key_Value = $("#txt_Search").val();
+            //url：请求地址
+            var url = "/SysSettingUp/Role/GetList?Parm_Key_Value=" + escape(Parm_Key_Value);
+            //colM：表头名称
+            var colM = [
+                { title: "主键", width: 100, align: "left", hidden: true },
+                { title: "名称", width: 100, align: "center" },
+                { title: "说明", width: 500 }
+            ];
+            //sort：要显示字段,数组对应
+            var sort = [
+                "ID",
+                "MingCheng",
+                "BeiZhu"
+            ];
+            PQLoadGrid("#grid_paging", url, colM, sort, 50, false);
+            $("#grid_paging").pqGrid({
+                freezeCols: 1
+            })
+            pqGridResize("#grid_paging", -82, +15);
+        }
+        //新增
+        function Add(url) {
+           
+            top.openDialog(url, 'Role_Form', '系统角色信息 - 添加', 500, 270, 50, 50);
+        }
+        //编辑
+        function Edit(url) {
+            var key = GetPqGridRowValue("#grid_paging", 0);
+            if (IsEditdata(key)) {
+                url = url + "?id=" + key;
+                top.openDialog(url, 'Role_Form', '系统角色信息 - 编辑', 500, 270, 50, 50);
+            }
+        }
+        //删除
+        function Delete(url) {
+            var key = GetPqGridRowValue("#grid_paging", 0);
+            if (IsDelData(key)) {
+                showConfirmMsg('注：您确认要删除当前选中项吗？', function (r) {
+                    if (r) {
+                        var pragma = 'id=' + key;
+                        getAjax(url, pragma, function (rs) {
+                            if (rs == '1') {
+                                showTipsMsg("恭喜删除成功！", 2000, 4);
+                                windowload();
+                            }
+                            else if (rs == '0') {
+                                showTipsMsg("角色已经分配给用户，不允许删除", 4000, 5);
+                            }
+                            else {
+                                showTipsMsg("删除失败，请稍后重试！", 4000, 5);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        //分配权限
+        function AllotAuth(url) {
+            var key = GetPqGridRowValue("#grid_paging", 0);
+            if (IsChecked(key)) {
+                url = url + "?id=" + key;
+                Urlhref(url);
+            }
+        }
+        //角色分配用户
+        function allotYongHu() {
+            var key = GetPqGridRowValue("#grid_paging", 0);
+            var Name = GetPqGridRowValue("#grid_paging", 1);
+            if (IsChecked(key)) {
+                var url = "/SysRole/RoleYongHu.aspx?key=" + key + "&Name=" + escape(Name);
+                top.openDialog(url, 'UserRole', '用户分配角色', 730, 500, 50, 50);
+            }
+        }
+        //详细信息
+        function detail() {
+            var key = GetPqGridRowValue("#grid_paging", 0);
+            if (IsChecked(key)) {
+                var url = "/SysRole/Role_Info.aspx?key=" + key;
+                Urlhref(url);
+            }
+        }
+        //刷新
+        function windowload() {
+            $("#grid_paging").pqGrid("refreshDataAndView");
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" >
+        <div class="btnbartitle">
+            <div>
+                系统角色信息
+            </div>
+        </div>
+        <div class="btnbarcontetn">
+            <div style="float: left;">
+                名称：<input type="text" id="txt_Search" class="txtSearch SearchImg" 
+                          style="width: 100px;" />
+                <input id="btnSearch" type="button" class="btnSearch" value="查 询" onclick="ListGrid()" />
+            </div>
+            <div style="text-align: right">
+                @{Html.RenderAction("GetButtons", "Button", new { Area = "SysSettingUp" });}
+            </div>
+        </div>
+        <div id="grid_paging" style="margin-top: 1px;">
+        </div>
+    </form>
+</body>
+</html>

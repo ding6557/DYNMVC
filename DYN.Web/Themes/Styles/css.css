@@ -1,0 +1,108 @@
+﻿html,body
+  {width:100%;
+   height:100%;
+   overflow:hidden;
+   margin:0px;
+   padding:0px;
+  }
+body
+  {position:relative;/*IE6、7如果不这么处理，会影响其它元素position:relative;定位*/
+   background-color:#fff;
+   top: 0px;
+   left: 0px;
+}
+* 
+  {font-size:9.5pt;
+   font-family:Arial,Helvetica,'微软雅黑',"Microsoft YaHei",SimHei,"宋体",sans-serif;
+   color:#333333;
+}
+form
+  {margin:0px;
+   padding:0px;
+  }
+textarea
+  {resize:none;
+   overflow-x:hidden;
+   overflow-y:auto;
+   border:1px solid #c4c4c4;
+  }
+label
+  {cursor:pointer;
+   font-family:Tahoma,Arial,Helvetica,'微软雅黑',"Microsoft YaHei",SimHei,"宋体",sans-serif;
+  }
+a
+  {outline:none;}
+  
+ select 
+ {
+     height:25px;
+     }
+.block
+  {display:block;}
+input
+  {vertical-align:middle;
+   padding:0px;
+    margin-bottom: 0px;
+}
+.mDiv
+  {width:98%;
+   margin:0 auto;
+   padding:10px 0;
+}
+.toolBar
+  {padding:0px 10px;
+   border:1px solid #c4c4c4;
+   margin-top: 5px;
+   margin-right:10px;
+   margin-left:10px;
+   margin-bottom:10px;
+   height:25px;
+   line-height:25px;
+   -webkit-box-shadow:0 0 5px rgba(0,0,0,.3);
+   box-shadow:0 0 5px rgba(0,0,0,.3);
+   position:relative;
+  }
+  .infoshow
+  {padding:0px 10px;
+   border:1px solid #c4c4c4;
+   margin-top: 5px;
+   margin-right:10px;
+   margin-left:10px;
+   margin-bottom:10px;
+   -webkit-box-shadow:0 0 5px rgba(0,0,0,.3);
+   box-shadow:0 0 5px rgba(0,0,0,.3);
+   position:relative;
+  }
+#loading
+  {width:200px;
+   height:25px;
+   background-color:red;
+   color:Yellow;
+   font-weight:bold;
+   font-size:16px;   
+   border:2px solid red;
+   padding:0px 0px 2px 0px;
+   text-align:center;
+   position:absolute;
+   line-height:18px;
+   top:1px;
+   right:1px;
+  }
+#loading img 
+  {vertical-align:middle;
+  }
+ .myhidden
+ {
+     display: none;
+ }
+ .TiShiDiv
+ {
+    padding: 3px; 
+    border: 2px groove #009933; 
+    font-family: 微软雅黑;
+    color: #FF0000;
+    font-weight: bold;
+     background-color:White ;
+     position: absolute;  
+     z-index: 10;
+}

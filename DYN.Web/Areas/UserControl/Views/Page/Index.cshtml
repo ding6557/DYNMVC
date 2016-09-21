@@ -1,0 +1,115 @@
+﻿
+@{
+    Layout = null;
+}
+
+<link href="/Themes/Styles/pagination.css" rel="stylesheet" type="text/css" />
+@*自定义用户分页控件*@
+<script type="text/javascript">
+    $(function () {
+        $(".pagination a").hover(function () {
+            $(this).addClass("pageBase_Div");
+        }, function () {
+            $(this).removeClass("pageBase_Div");
+        });
+    })
+    function Script(parm) {
+        Loading(true);
+        $("#splast").removeClass('pageBase_Div');
+        $("#spnext").removeClass('pageBase_Div');
+        $("#spprev").removeClass('pageBase_Div');
+        $("#spfirst").removeClass('pageBase_Div');
+        if (parm == 1) {
+            $("#spfirst").attr('disabled', 'disabled');
+            $("#spprev").attr('disabled', 'disabled');
+            $("#spnext").attr('disabled', 'disabled');
+            $("#splast").attr('disabled', 'disabled');
+            $("#splast").addClass('pageBase_Div');
+            $("#spnext").addClass('pageBase_Div');
+            $("#spprev").addClass('pageBase_Div');
+            $("#spfirst").addClass('pageBase_Div');
+        } else if (parm == 2) {
+            $("#spfirst").attr('disabled', 'disabled');
+            $("#spprev").attr('disabled', 'disabled');
+            $("#spnext").attr('disabled', '');
+            $("#splast").attr('disabled', '');
+            $("#spfirst").addClass('pageBase_Div');
+            $("#spprev").addClass('pageBase_Div');
+        } else if (parm == 3) {
+            $("#spfirst").attr('disabled', '');
+            $("#spprev").attr('disabled', '');
+            $("#spnext").attr('disabled', 'disabled');
+            $("#splast").attr('disabled', 'disabled');
+            $("#spnext").addClass('pageBase_Div');
+            $("#splast").addClass('pageBase_Div');
+        } else {
+            $("#spfirst").attr('disabled', '');
+            $("#spprev").attr('disabled', '');
+            $("#spnext").attr('disabled', '');
+            $("#splast").attr('disabled', '');
+        }
+    }
+</script>
+<div class="pagination">
+    <div style="float: left; padding-top: 5px;">
+        &nbsp;检索到
+        <Label ID="lblRecordCount" ></Label>
+        条记录，显示第
+        <Label ID="default_pgStartRecord" ></Label>
+        条 - 第
+        <Label ID="default_pgEndRecord" ></Label>
+        条
+    </div>
+    <div style="float: right;">
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="pagination-btn-separator" />
+                    </td>
+                    <td>
+                        &nbsp;
+                        <a ID="hlkFirst" title="首 页"  href="">
+                            <span id="spfirst" class="first">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </a>
+                    </td>
+                    <td>
+                        &nbsp;
+                        <a id="hlkPrev" title="上 页"  href="">
+                            <span id="spprev" class="prev">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </a>
+                    </td>
+                    <td>
+                        <div class="pagination-btn-separator" />
+                    </td>
+                    <td>
+                        &nbsp; 第
+                        <Label ID="lblCurrentPageIndex">1</Label>
+                        页&nbsp;/&nbsp;共
+                        <Label ID="lblPageCount" ></Label>
+                        页&nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <div class="pagination-btn-separator" />
+                    </td>
+                    <td>
+                        &nbsp;
+                        <a id="hlkNext" title="下 页" href="">
+                            <span id="spnext" class="next">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </a>
+                    </td>
+                    <td>
+                        &nbsp;
+                        <a id="hlkLast" title="尾 页" href="">
+                            <span id="splast" class="last">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </a>
+                    </td>
+                    <td>
+                        <div class="pagination-btn-separator"></div>
+                    </td>
+                   
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

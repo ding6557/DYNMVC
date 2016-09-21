@@ -1,0 +1,243 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head id="Head1" >
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
+    <title>用户管理</title>
+    <link href="/Themes/Styles/style.css" rel="stylesheet" />
+    <script src="/Themes/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="/Themes/Scripts/TreeView/jquery.cookie.js"></script>
+    <script src="/Themes/Scripts/TreeView/jquery.treeview.js"></script>
+    <script src="/Themes/Scripts/FunctionJS.js"></script>
+    <script src="/Themes/Scripts/PqGrid/jquery-ui.min.js"></script>
+    <script src="/Themes/Scripts/PqGrid/pqgrid.min.js" charset="GBK"></script>
+    <link href="/Themes/Scripts/TreeView/jquery.treeview.css" rel="stylesheet" />
+    <link href="/Themes/Scripts/PqGrid/pqgrid.min.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(function () {
+            $("html").css("overflow", "hidden");
+            $("body").css("overflow", "hidden");
+            iframeresize();
+            Loading(true);
+            //$("#target_right").attr("src", "YongHuList.aspx");
+        })
+    </script>
+</head>
+<body>
+    <form id="form1" >
+        <div id="iframeMainContent">
+            <div class="iframeleft">
+                <div scrolling="auto" scrolling="yes"
+                     width="100%" height="100%">
+                    
+                </div>
+            </div>
+            <div class="iframeContent">
+                <div scrolling="auto" scrolling="yes"
+                     width="100%" height="100%">
+                    <script type="text/javascript">
+                        $(function() {
+                            divresize(63);
+                            $("#BuMenMingCheng").html('<%=BuMenMingCheng %>');
+                            $("#hiddenBuMenID").val('<%=BuMenID %>');
+                            ListGrid();
+                        });
+
+                        /**加载表格函数**/
+                        function ListGrid() {
+                            var BuMenID = $("#hiddenBuMenID").val()
+                            var Parm_Key_Value = $("#txt_Search").val();
+                            //url：请求地址
+                            var url = "YongHuList.aspx?action=GridBindList&Parm_Key_Value=" + escape(Parm_Key_Value) + '&BuMenID=' + BuMenID;
+                            //colM：表头名称
+                            var colM = [
+                                { title: "用户主键", width: 100, align: "left", hidden: true },
+                                { title: "姓名", width: 100, align: "center" },
+                                { title: "登录账户", width: 200, align: "center" },
+                                {
+                                    title: "用户类别",
+                                    width: 100,
+                                    align: "center",
+                                    render: function(ui) {
+                                        var rowData = ui.rowData;
+                                        var value = rowData[3];
+                                        if (value == '0') {
+                                            return "学生";
+                                        }
+                                        if (value == '1') {
+                                            return "基地";
+                                        }
+                                        if (value == '2') {
+                                            return "区县";
+                                        }
+                                        if (value == '3') {
+                                            return "中心";
+                                        }
+                                    }
+                                },
+                                { title: "所在部门", width: 200, align: "center" },
+                                { title: "最后登录时间", width: 140, align: "center" },
+                                { title: "说明", width: 500 }
+                            ];
+                            //sort：要显示字段,数组对应
+                            var sort = [
+                                "ID",
+                                "Name",
+                                "LoginName",
+                                "Type",
+                                "BuMen",
+                                "DengLuTime",
+                                "BeiZhu"
+                            ];
+                            PQLoadGrid("#grid_paging", url, colM, sort, 50, false);
+                            $("#grid_paging").pqGrid({
+                                freezeCols: 4
+                            })
+                            pqGridResize("#grid_paging", -82, +15);
+                        }
+
+//新增
+                        function add() {
+                            var BuMenID = $("#hiddenBuMenID").val()
+                            var url = "/SysYongHu/Add.aspx?BuMenID=" + BuMenID;
+                            top.openDialog(url, 'Add', '用户信息 - 添加', 600, 320, 50, 50);
+                        }
+
+//编辑
+                        function edit() {
+                            var BuMenID = $("#hiddenBuMenID").val()
+                            var type = GetPqGridRowValue("#grid_paging", 3);;
+                            var key = GetPqGridRowValue("#grid_paging", 0);
+                            if (IsEditdata(key)) {
+                                if (type < 1) {
+                                    showWarningMsg("<span>该类用户不能编辑！</span>", 4000, 5);
+                                } else {
+                                    var url = "/SysYongHu/Add.aspx?key=" + key + "&BuMenID=" + BuMenID;
+                                    top.openDialog(url, 'Edit', '用户信息 - 编辑', 600, 320, 50, 50);
+                                }
+                            }
+                        }
+
+//删除
+                        function Delete() {
+                            var type = GetPqGridRowValue("#grid_paging", 3);
+                            var key = GetPqGridRowValue("#grid_paging", 0);
+
+                            if (IsDelData(key)) {
+                                if (type < 2) {
+                                    showTipsMsg("<span style='color:red'>该类用户不能删除！</span>", 4000, 5);
+                                } else {
+                                    showConfirmMsg('注：您确认要删除当前选中项吗？', function(r) {
+                                        if (r) {
+                                            var pragma = 'action=Delete&key=' + key;
+                                            getAjax('YongHuList.aspx', pragma, function(rs) {
+                                                if (rs) {
+                                                    showTipsMsg("恭喜删除成功！", 2000, 4);
+                                                    windowload();
+                                                } else {
+                                                    showTipsMsg("<span style='color:red'>删除失败，请稍后重试！</span>", 4000, 5);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        function BuMenTree_Callback(BuMenID, MingCheng) {
+
+
+                            $("#BuMenMingCheng").html(MingCheng);
+                            $("#hiddenBuMenID").val(BuMenID)
+                            ListGrid();
+                        }
+
+//分配权限
+                        function allotAuthority() {
+                            var key = GetPqGridRowValue("#grid_paging", 0);
+                            if (IsChecked(key)) {
+                                var url = "/SysYongHu/AllotAuthority.aspx?key=" + key;
+                                Urlhref(url);
+                            }
+                        }
+
+//用户分配角色
+                        function allotRoles() {
+                            var key = GetPqGridRowValue("#grid_paging", 0);
+                            var Name = GetPqGridRowValue("#grid_paging", 1);
+                            if (IsChecked(key)) {
+                                var url = "/SysYongHu/YongHuRole.aspx?key=" + key + "&Name=" + escape(Name);
+                                top.openDialog(url, 'UserRole', '用户分配角色', 730, 450, 50, 50);
+                            }
+                        }
+
+                        //详细信息
+                        function detail() {
+                            var key = GetPqGridRowValue("#grid_paging", 0);
+                            if (IsChecked(key)) {
+                                var url = "/SysYongHu/Info.aspx?key=" + key;
+                                Urlhref(url);
+                            }
+                        }
+
+//密码重置
+                        function reset() {
+                            var key = GetPqGridRowValue("#grid_paging", 0);
+                            if (IsChecked(key)) {
+                                showConfirmMsg('注：您确认重置选中用户的密码吗？', function(r) {
+                                    if (r) {
+                                        var pragma = 'action=Reset&key=' + key;
+                                        getAjax('YongHuList.aspx', pragma, function(rs) {
+                                            if (rs) {
+                                                showTipsMsg("恭喜重置成功,密码为123456！", 2000, 4);
+                                                windowload();
+                                            } else {
+                                                showTipsMsg("<span style=' font-size:18;color:red;'>重置失败，请稍后重试！</span>", 4000, 5);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+
+//刷新
+                        function windowload() {
+                            $("#grid_paging").pqGrid("refreshDataAndView");
+                        }
+                    </script>
+                    <form id="form1" >
+                        <input type="hidden" id="hiddenBuMenID" />
+                        <div class="btnbartitle">
+                            <div>
+                                <div>
+                                    用户信息 - <span id="BuMenMingCheng"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btnbarcontetn">
+                            <div style="float: left;">
+                                姓名：<input type="text" id="txt_Search" class="txtSearch SearchImg" 
+                                          style="width: 100px;" />
+                                <input id="btnSearch" type="button" class="btnSearch" value="查 询" onclick="ListGrid()" />
+                            </div>
+                            <div style="text-align: right">
+                                @{Html.RenderAction("GetButtons", "Button", new { Area = "SysSettingUp" });}
+                            </div>
+                        </div>
+                        <div id="grid_paging" style="margin-top: 1px;">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

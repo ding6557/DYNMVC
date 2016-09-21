@@ -1,0 +1,12 @@
+E:\MyProject\MVCFW\DYN.Common\bin\Debug\Common.dll
+E:\MyProject\MVCFW\DYN.Common\bin\Debug\Common.pdb
+E:\MyProject\MVCFW\DYN.Common\bin\Debug\itextsharp.dll
+E:\MyProject\MVCFW\DYN.Common\obj\Debug\Common.dll
+E:\MyProject\MVCFW\DYN.Common\obj\Debug\Common.pdb
+E:\MyProject\MVCFW\DYN.Common\obj\Debug\DYN.Common.csprojResolveAssemblyReference.cache
+D:\VSProject\MVCFW\DYN.Common\bin\Debug\Common.dll
+D:\VSProject\MVCFW\DYN.Common\bin\Debug\Common.pdb
+D:\VSProject\MVCFW\DYN.Common\bin\Debug\itextsharp.dll
+D:\VSProject\MVCFW\DYN.Common\obj\Debug\DYN.Common.csprojResolveAssemblyReference.cache
+D:\VSProject\MVCFW\DYN.Common\obj\Debug\Common.dll
+D:\VSProject\MVCFW\DYN.Common\obj\Debug\Common.pdb

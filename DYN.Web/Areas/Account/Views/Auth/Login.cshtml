@@ -1,0 +1,319 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
+    <title>西安市毕业生综合管理系统</title>
+    <!--[if IE]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+    <link href="~/Themes/Styles/accordionTree.css" rel="stylesheet" />
+    <link href="~/Themes/Styles/login.css" rel="stylesheet" />
+    <script type="text/javascript" src="/Themes/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Themes/Scripts/artDialog/artDialog.source.js" type="text/javascript"></script>
+    <link href="~/Themes/Scripts/artDialog/skins/blue.css" rel="stylesheet" type="text/css" />
+    <script src="~/Themes/Scripts/artDialog/artDialog.source.js" type="text/javascript"></script>
+    <script src="~/Themes/Scripts/artDialog/iframeTools.source.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/Themes/Scripts/FunctionJS.js"></script>
+    <style type="text/css">
+        /* 设置提示文字颜色 */
+        ::-webkit-input-placeholder {
+            color: #838383;
+        }
+
+        :-moz-placeholder {
+            color: #838383;
+        }
+
+        .placeholder {
+            color: #ccc;
+        }
+    </style>
+    <script type="text/javascript">
+        /*
+        检查浏览器是否支持
+        */
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-28802488-1']);
+        _gaq.push(['_trackPageview']);
+        (function () {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        var isIE = !!window.ActiveXObject;
+        var isIE6 = isIE && !window.XMLHttpRequest;
+        if (isIE6) {
+            window.location.href = "/ErrorPage/Browser_Not_Support.aspx";
+        }
+        //回车键
+        document.onkeydown = function (e) {
+            if (!e) e = window.event; //火狐中是 window.event
+            if ((e.keyCode || e.which) == 13) {
+                var obtnSearch = document.getElementById("Log_Submit")
+                obtnSearch.focus(); //让另一个控件获得焦点就等于让文本输入框失去焦点
+                obtnSearch.click();
+            }
+        }
+
+        //初始化
+        $(function () {
+            @if (HttpContext.Current.Session["script"] != null)
+            {
+                @Html.Raw(HttpContext.Current.Session["script"]);
+                HttpContext.Current.Session["script"] = null;
+            }
+                           
+            $("#Code").bind('keyup', function () {
+                if ($("#Code").val().length == 4) {
+                    return CheckUserDataValid();
+                }
+            })
+        })
+        function LoginBtn() {
+            var Account = $("#Account").val();
+            var Pwd = $("#Pwd").val();
+            var code = $("#Code").val();
+            if (Account == "") {
+                $("#Account").focus();
+                showTopMsg("登录账户不能为空", 4000, 'error');
+                return false;
+            } else if (Pwd == "") {
+                $("#Pwd").focus();
+                showTopMsg("登录密码不能为空", 4000, 'error');
+                return false;
+            } else if (code == "") {
+                $("#Code").focus();
+                showTopMsg("验证码不能为空", 4000, 'error');
+                return false;
+            } else if (code.length != 4) {
+                $("#Code").focus();
+                showTopMsg("验证码必须为4位", 4000, 'error');
+                return false;
+            } else {
+                return true;
+            }
+        }
+        /**
+        数据验证完整性
+        **/
+        function CheckUserDataValid() {
+            if (!LoginBtn()) {
+                return false;
+            }
+            else {
+                CheckingLogin(1);
+                var Account = $("#Account").val();
+                var Pwd = $("#Pwd").val();
+                var code = $("#Code").val();
+                var parm = 'Account=' + escape(Account) + '&Pwd=' + escape(Pwd) + '&code=' + escape(code);
+                getAjax('/Account/Auth/Login?', parm, function (rs) {
+
+                    if (parseInt(rs) == 1) {
+                        $("#Code").focus();
+                        showTopMsg("验证码输入不正确", 4000, 'error');
+                        $("#Code").val("");
+                        ToggleCode("Verify_codeImag", '/Account/Auth/GetVerifyCode');
+                        CheckingLogin(0);
+                    } else if (parseInt(rs) == 2) {
+                        $("#Account").focus();
+                        showTopMsg("登录账户被停用", 4000, 'error');
+                        CheckingLogin(0);
+                    } else if (parseInt(rs) == 4) {
+                        $("#Account").focus();
+                        showTopMsg("账户或密码有错误", 4000, 'error');
+                        resetInput();
+                        CheckingLogin(0);
+                    } else if (parseInt(rs) == 6) {
+                        $("#Account").focus();
+                        showTopMsg("该用户已经登录", 4000, 'error');
+                        CheckingLogin(0);
+                    } else if (parseInt(rs) == 3) {
+                        setTimeout(Load, 1000);
+                    } else if (parseInt(rs) == 7) {
+                        $("#Account").focus();
+                        showTopMsg("该用户已不存在,请检查！", 4000, 'error');
+                        CheckingLogin(0);
+                    }
+                    else if (parseInt(rs) == 8) {
+                        $("#Account").focus();
+                        showTopMsg("密码错误三次，请在10分钟后再次登录！", 4000, 'error');
+                        CheckingLogin(0);
+                        return false;
+                    } else {
+                        CheckingLogin(0);
+                        alert(rs);
+                        window.location.href = window.location.href.replace('#', '');
+                    }
+                });
+            }
+        }
+        //登陆加载
+        function Load() {
+            window.location.href = '/Account/Auth/index';
+            return false;
+        }
+        ////登陆加载
+        //function GoHome() {
+        //    window.location.href = '/Frame/MainTree.aspx';
+        //    return false;
+        //}
+        //清空
+        function resetInput() {
+            $("#Account").focus(); //默认焦点
+            $("#Account").val("");
+            $("#Pwd").val("");
+            $("#Code").val("");
+        }
+        function CheckingLogin(id) {
+            if (id == 1) {
+                $("#Log_Submit").attr("disabled", "disabled")
+                $("#Log_Submit").attr("class", "signload");
+                $(".load").show();
+            } else {
+                $("#Log_Submit").removeAttr('disabled');
+                $("#Log_Submit").attr("class", "sign");
+                $(".load").hide();
+            }
+        }
+        //判断浏览器是否支持 placeholder属性
+        function isPlaceholder() {
+            var input = document.createElement('input');
+            return 'placeholder' in input;
+        }
+
+        if (!isPlaceholder()) {//不支持placeholder 用jquery来完成
+            $(document).ready(function () {
+                if (!isPlaceholder()) {
+                    $("input").not("input[type='password']").each(//把input绑定事件 排除password框
+                function () {
+                    if ($(this).val() == "" && $(this).attr("placeholder") != "") {
+                        $(this).val($(this).attr("placeholder"));
+                        $(this).focus(function () {
+                            if ($(this).val() == $(this).attr("placeholder")) $(this).val("");
+                        });
+                        $(this).blur(function () {
+                            if ($(this).val() == "") $(this).val($(this).attr("placeholder"));
+                        });
+                    }
+                });
+                    //对password框的特殊处理1.创建一个text框 2获取焦点和失去焦点的时候切换
+                    var pwdField = $("input[type=password]");
+                    var pwdVal = pwdField.attr('placeholder');
+                    pwdField.after('<input id="pwdPlaceholder" type="text" value=' + pwdVal + ' autocomplete="off" />');
+                    var pwdPlaceholder = $('#pwdPlaceholder');
+                    pwdPlaceholder.show();
+                    pwdField.hide();
+
+                    pwdPlaceholder.focus(function () {
+                        pwdPlaceholder.hide();
+                        pwdField.show();
+                        pwdField.focus();
+                    });
+
+                    pwdField.blur(function () {
+                        if (pwdField.val() == '') {
+                            pwdPlaceholder.show();
+                            pwdField.hide();
+                        }
+                    });
+
+                }
+            });
+
+        }
+        function XSZhuCe() {
+            var url = '/BiYeSheng/ZhuCe.aspx?key=1';
+
+            // openwindow(url, '学生注册', 600, 620);
+            top.openDialog(url, 'ZhuCe', '毕业生注册', 880, 550, 50, 50);
+            // window.location.href = '/BiYeSheng/ZhuCe.aspx';
+
+        }
+        function JXZhuCe() {
+            var url = '/BiYeSheng_JianXi/JiDi/JiDiZhuCe.aspx';
+            top.openDialog(url, 'JiDiZhuCe', '基地注册', 880, 550, 50, 50);
+            //showTopMsg("该模块正在开发中......", 4000, 'error');
+        }
+        function CYZhuCe() {
+            var url = '/BiYeSheng_ChuangYe/JiDi_ZhuCe.aspx';
+            top.openDialog(url, 'JiDiZhuCe', '创业基地注册', 880, 550, 50, 50);
+            //showTopMsg("该模块正在开发中......", 4000, 'error');
+        }
+
+        function openwindow(url, name, iWidth, iHeight) {
+            var url;                                 //转向网页的地址;
+            var name;                           //网页名称，可为空;
+            var iWidth;                          //弹出窗口的宽度;
+            var iHeight;                        //弹出窗口的高度;
+            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;       //获得窗口的垂直位置;
+            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;           //获得窗口的水平位置;
+            window.open(url, name, 'height=' + iHeight + ',,innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+        }
+    </script>
+</head>
+<body>
+    <div id="thead">
+        <div class="bg1">
+        </div>
+        <div class="bg2">
+        </div>
+        <div class="bg3">
+            <div class="nav">
+                <ul class="Form FancyForm">
+                    <li>
+                        <input id="Account" type="text" class="stext" placeholder="身份证号/用户名" />
+                        <span class="fff"></span>
+                    </li>
+                    <li>
+                        <input id="Pwd" name="" type="password" class="stext" placeholder="输入登录密码" />
+                        <span class="fff"></span>
+                    </li>
+                </ul>
+                <div class="s8">
+                    <table>
+                        <tr style="height: 20px;">
+                            <td>
+                                <input maxlength="4" id="Code" name="" type="text" class="sptext" style="width: 100px;
+                                    ime-mode: disabled" placeholder="验证码" />
+                                <span class="fff"></span>
+                            </td>
+                            <td>
+                                <img src="/Account/Auth/GetVerifyCode" id="Verify_codeImag" width="80" height="20" alt="点击切换验证码"
+                                     title="点击切换验证码" style="cursor: pointer;" onclick="ToggleCode(this.id, '/Account/Auth/GetVerifyCode');return false;" />
+                            </td>
+                            <td>
+                                <input id="Log_Submit" type="button" class="sign" onclick="return CheckUserDataValid();" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="s0" id="example">
+                    <table border="0">
+                        <tr>
+                            <td>
+                                <input id="XueShengZhuCe" type="button" class="xszhuce" onclick="return XSZhuCe();" />
+                            </td>
+                            <td>
+                                <input id="JianXiJiDiZhuCe" type="button" class="jxzhuce" onclick="return JXZhuCe();" />
+                            </td>
+                            <td>
+                                <input id="ChuangYeJiDiZhuCe" type="button" class="cyzhuce" onclick="return CYZhuCe();" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="load">
+                    <img src="/Themes/Images/Login/loading.gif" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="bottom">
+    </div>
+</body>
+</html>
+
+
+
+

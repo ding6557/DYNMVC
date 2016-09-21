@@ -1,0 +1,206 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head >
+    <title>菜单图标</title>
+    <link href="/Themes/Styles/style.css" rel="stylesheet" />
+    <script src="/Themes/Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="/Themes/Scripts/artDialog/artDialog.source.js" type="text/javascript"></script>
+    <script src="/Themes/Scripts/artDialog/iframeTools.source.js" type="text/javascript"></script>
+    <script src="/Themes/Scripts/FunctionJS.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            divresize();
+            $(".divicons").click(function () {
+                top.Menu_Form.Get_Menu_Img($(this).attr('title'));
+            }).dblclick(function () {
+                OpenClose();
+            });
+
+        })
+        /**自应表格高度**/
+        function divresize() {
+            resizeU();
+            $(window).resize(resizeU);
+            function resizeU() {
+                $(".div-body").css("height", $(window).height() - 59);
+            }
+        }
+    </script>
+    <style type="text/css">
+        .divicons {
+            float: left;
+            border: solid 1px #ccc;
+            margin: 5px;
+            padding: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+            .divicons:hover {
+                color: #FFF;
+                border: solid 1px #3399dd;
+                background: #2288cc;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bbee', endColorstr='#2288cc');
+                background: linear-gradient(top, #33bbee, #2288cc);
+                background: -moz-linear-gradient(top, #33bbee, #2288cc);
+                background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#33bbee), to(#2288cc));
+                text-shadow: -1px -1px 1px #1c6a9e;
+                font-weight: bold;
+            }
+    </style>
+</head>
+<body>
+    <form id="form1">
+        <input id="hidden_Size" type="hidden" />
+        <div class="btnbartitle">
+            <div>
+                系统图标全取
+            </div>
+        </div>
+        <div class="div-body">
+            @Html.Raw(ViewBag.Pages)
+        </div>
+        <link href="/Themes/Styles/pagination.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript">
+            $(function () {
+                $(".pagination a").hover(function () {
+                    $(this).addClass("pageBase_Div");
+                }, function () {
+                    $(this).removeClass("pageBase_Div");
+                });
+            })
+            function Script(parm) {
+                Loading(true);
+                $("#splast").removeClass('pageBase_Div');
+                $("#spnext").removeClass('pageBase_Div');
+                $("#spprev").removeClass('pageBase_Div');
+                $("#spfirst").removeClass('pageBase_Div');
+                if (parm == 1) {
+                    $("#spfirst").attr('disabled', 'disabled');
+                    $("#spprev").attr('disabled', 'disabled');
+                    $("#spnext").attr('disabled', 'disabled');
+                    $("#splast").attr('disabled', 'disabled');
+                    $("#splast").addClass('pageBase_Div');
+                    $("#spnext").addClass('pageBase_Div');
+                    $("#spprev").addClass('pageBase_Div');
+                    $("#spfirst").addClass('pageBase_Div');
+                } else if (parm == 2) {
+                    $("#spfirst").attr('disabled', 'disabled');
+                    $("#spprev").attr('disabled', 'disabled');
+                    $("#spnext").attr('disabled', '');
+                    $("#splast").attr('disabled', '');
+                    $("#spfirst").addClass('pageBase_Div');
+                    $("#spprev").addClass('pageBase_Div');
+                } else if (parm == 3) {
+                    $("#spfirst").attr('disabled', '');
+                    $("#spprev").attr('disabled', '');
+                    $("#spnext").attr('disabled', 'disabled');
+                    $("#splast").attr('disabled', 'disabled');
+                    $("#spnext").addClass('pageBase_Div');
+                    $("#splast").addClass('pageBase_Div');
+                } else {
+                    $("#spfirst").attr('disabled', '');
+                    $("#spprev").attr('disabled', '');
+                    $("#spnext").attr('disabled', '');
+                    $("#splast").attr('disabled', '');
+                }
+            }
+        </script>
+        <div class="pagination">
+            <div style="float: left; padding-top: 5px;">
+                &nbsp;检索到
+                <Label ID="lblRecordCount" >@ViewBag.rowcount</Label>
+                条记录，显示第
+                <Label ID="default_pgStartRecord">@(ViewBag.rowbegin+1)</Label>
+                条 - 第
+                <Label ID="default_pgEndRecord" >@ViewBag.rowend</Label>
+                条
+            </div>
+            <div style="float: right;">
+                <table border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="pagination-btn-separator" />
+                            </td>
+                            <td>
+                                &nbsp;
+                                <a id="hlkFirst" title="首 页" href="~/SysSettingUp/Menu/GetIcons?Size=@ViewBag.size&PageIndex=1">
+                                    <span id="spfirst" class="first">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </a>
+                            </td>
+                            <td>
+                                &nbsp;
+                                @{
+                                    if (ViewBag.pageIndex <= 1)
+                                    {
+                                        <a id="hlkPrev" title="上 页" href="#">
+                                            <span id="spprev" class="prev">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a id="hlkPrev" title="上 页" href="~/SysSettingUp/Menu/GetIcons?Size=@ViewBag.size&PageIndex=@(ViewBag.pageIndex - 1)">
+                                            <span id="spprev" class="prev">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        </a>
+                                    }
+                                }
+                                
+
+                            </td>
+                            <td>
+                                <div class="pagination-btn-separator" />
+                            </td>
+                            <td>
+                                &nbsp; 第
+                                <label id="lblCurrentPageIndex">@ViewBag.pageIndex</label>
+                                页&nbsp;/&nbsp;共
+                                <label id="lblPageCount">@(ViewBag.rowcount / (ViewBag.rowend - ViewBag.rowbegin) + 1)</label>
+                                页&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                <div class="pagination-btn-separator" />
+                            </td>
+                            <td>
+                                &nbsp;
+
+                                @{
+                                    if (ViewBag.rowcount <= ViewBag.rowend)
+                                    {
+                                         <a id="hlkNext" title="下 页" href="#">
+                                    <span id="spnext" class="next">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </a>
+                                    }
+                                    else
+                                    {
+                                         <a id="hlkNext" title="下 页" href="~/SysSettingUp/Menu/GetIcons?Size=@ViewBag.size&PageIndex=@(ViewBag.pageIndex + 1)">
+                                    <span id="spnext" class="next">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </a>
+                                    }
+                                }
+                               
+                            </td>
+                            <td>
+                                &nbsp;
+                                <a id="hlkLast" title="尾 页" href="~/SysSettingUp/Menu/GetIcons?Size=@ViewBag.size&PageIndex=@(ViewBag.rowcount / (ViewBag.rowend - ViewBag.rowbegin) + 1)">
+                                    <span id="splast" class="last">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="pagination-btn-separator" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A8ABF0F2-CD3B-488A-9531-A269F150F6EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>..\LIB\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\DbErrorMsg.cs" />
+    <Compile Include="Common\DbLog.cs" />
+    <Compile Include="Common\DbReader.cs" />
+    <Compile Include="Common\EntityAttribute.cs" />
+    <Compile Include="Common\RegistryHelper.cs" />
+    <Compile Include="Common\SoftRegHelper.cs" />
+    <Compile Include="DotNetBean\CookieHelper.cs" />
+    <Compile Include="DotNetBean\RequestSession.cs" />
+    <Compile Include="DotNetBean\SessionUser.cs" />
+    <Compile Include="DotNetBean\VerifyCodeHelper.cs" />
+    <Compile Include="DotNetCode\CacheHelper.cs" />
+    <Compile Include="DotNetCode\ClassHelper.cs" />
+    <Compile Include="DotNetCode\CommonHelper.cs" />
+    <Compile Include="DotNetCode\ConvertHelper.cs" />
+    <Compile Include="DotNetCode\DataCache.cs" />
+    <Compile Include="DotNetCode\DateTimeHelper.cs" />
+    <Compile Include="DotNetCode\HttpHelper.cs" />
+    <Compile Include="DotNetCode\LogHelper.cs" />
+    <Compile Include="DotNetCode\PinyinHelper.cs" />
+    <Compile Include="DotNetCode\RequestHelper.cs" />
+    <Compile Include="DotNetCode\RMBHelper.cs" />
+    <Compile Include="DotNetCode\SqlFilterHelper.cs" />
+    <Compile Include="DotNetCode\SqlParam.cs" />
+    <Compile Include="DotNetConfig\ConfigHelper.cs" />
+    <Compile Include="DotNetData\DataTableHelper.cs" />
+    <Compile Include="DotNetData\HashtableHelper.cs" />
+    <Compile Include="DotNetData\IListHelper.cs" />
+    <Compile Include="DotNetData\ReaderToIListHelper.cs" />
+    <Compile Include="DotNetData\XMLHelper.cs" />
+    <Compile Include="DotNetEncrypt\DEncrypt.cs" />
+    <Compile Include="DotNetEncrypt\DESEncrypt.cs" />
+    <Compile Include="DotNetEncrypt\HashEncode.cs" />
+    <Compile Include="DotNetEncrypt\Md5Helper.cs" />
+    <Compile Include="DotNetEncrypt\RSACryption.cs" />
+    <Compile Include="DotNetFile\DirFileHelper.cs" />
+    <Compile Include="DotNetFile\FileDownHelper.cs" />
+    <Compile Include="DotNetFile\FileHelper.cs" />
+    <Compile Include="DotNetFile\FTPHelper.cs" />
+    <Compile Include="DotNetFile\GZipHelper.cs" />
+    <Compile Include="DotNetFile\ServerInfo.cs" />
+    <Compile Include="DotNetFile\UploadHelper.cs" />
+    <Compile Include="DotNetImage\ImageHelper.cs" />
+    <Compile Include="DotNetJson\ConvertJson.cs" />
+    <Compile Include="DotNetJson\JsonHelper.cs" />
+    <Compile Include="DotNetJson\JsonHelper2.cs" />
+    <Compile Include="PDF\PDFOperation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceManager\MessageHelper.cs" />
+    <Compile Include="XML操作类\XmlHelper.cs" />
+    <Compile Include="XML操作类\XMLProcess.cs" />
+    <Compile Include="图片处理\ImageClass.cs" />
+    <Compile Include="图片处理\ImageDown.cs" />
+    <Compile Include="图片处理\ImageUpload.cs" />
+    <Compile Include="字符串\StringHelper.cs" />
+    <Compile Include="导出Excel_Word\ExcelHelper.cs" />
+    <Compile Include="导出Excel_Word\WordHelper.cs" />
+    <Compile Include="日历\CNDate.cs" />
+    <Compile Include="条形码\BarCodeToHTML.cs" />
+    <Compile Include="正则表达式\ValidateUtil.cs" />
+    <Compile Include="身份证\ShenFhenZhengHelper.cs" />
+    <Compile Include="邮件\SMTPManager.cs" />
+    <Compile Include="配置\BaseSystemInfo.cs" />
+    <Compile Include="页面辅助类\ControlBindHelper.cs" />
+    <Compile Include="页面辅助类\HTMLHelper.cs" />
+    <Compile Include="页面辅助类\IPScanerHelper.cs" />
+    <Compile Include="页面辅助类\ShowMsgHelper.cs" />
+    <Compile Include="页面辅助类\WebHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Chart图形\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
